@@ -11,7 +11,8 @@ urlpatterns = patterns('',
                    # INSERT/UPDATE
                    #url(r'^delete_photo_by_id/$', views.delete_photo_by_id, name='delete_photo_by_id'),
                    #url(r'^update_photo_by_id/$', views.update_photo_by_id, name='update_photo_by_id'),
-                   #url(r'^store_photo/$', views.store_photo, name='store_photo'),
+                   url(r'^store_photo/$', views.store_photo, name='store_photo'),
+                   url(r'^store_user/$', views.store_user, name='store_user'),
 
                
                )

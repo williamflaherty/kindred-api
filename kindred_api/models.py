@@ -4,7 +4,7 @@ from django.db import models
 
 class Challenge(models.Model):
     challenge = models.CharField(max_length = 140, unique = True)
-    pub_date = models.DateTimeField('date_published')
+    pub_date = models.DateField('date_published')
     completions = models.IntegerField(default = 0)
 
     def __unicode__ (self):
@@ -13,9 +13,11 @@ class Challenge(models.Model):
 class User(models.Model):
     username = models.CharField(max_length = 100)
     ig_token = models.CharField(max_length = 200)
-    ig_token_expiry = models.DateTimeField('instagram_token_expiration')
     join_date = models.DateTimeField('join_date')
     #number of challenges completed
+    
+    def __unicode__ (self):
+        return u'%s' % (self.username)
 
 class Photo(models.Model):
     url = models.CharField(max_length = 2083)
