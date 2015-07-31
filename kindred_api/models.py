@@ -33,4 +33,5 @@ class Photo(models.Model):
     city = models.CharField(max_length=85)
     top_tf = models.BooleanField('top_twenty_five', default=False)
 
-
+    def __repr__(self):
+        return "<Photo url:%s\nchallenge:%s\npub_date:%s\n>" % (self.url, self.challenge, self.pub_date)

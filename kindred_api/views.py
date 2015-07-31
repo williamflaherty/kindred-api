@@ -110,7 +110,7 @@ def store_photo(request):
                     retval = controller.store_photo(retval, request.FILES["file"], photo)
                     if retval.success:
                         retval.status_code = 200
-                        retval.data["photo"] = (ChallengeSerializer(retval.data["curr_challenge"])).data
+                        retval.data["photo"] = (PhotoSerializer(retval.data["photo"])).data
          
         except Exception as e:
             retval.exceptions.append(str(e))

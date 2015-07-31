@@ -6,7 +6,7 @@ from django.utils import timezone
 import random
 import urllib2
 import json
-
+import os.path
 
 def get_challenge(status): 
      """
@@ -54,7 +54,6 @@ def store_photo(status, up_file, file_data):
     """
     Store the file and the associated data
     """
-    print file_data
     #update path to save files to www.getkindred.com/media/file_name.jpg
     dest_dir = "/Users/Toohey/django_projects/kindred/media/"
 
@@ -62,9 +61,7 @@ def store_photo(status, up_file, file_data):
     user = models.User.objects.filter(pk = file_data.user.pk)
     #file name is date published + ig user number
     #user[0].username is a big assumption :p
-    for item in file_data:
-    	print item 
-    new_name = user[0].username + "_" + file_data.pub_data
+    new_name = user[0].username + "_" + str(file_data.pub_date.year) + "-" + str(file_data.pub_date.month) + "-" + str(file_data.pub_date.day) + ".jpg"
     #make sure there are no spaces
     new_name = new_name.replace(" ", "_")
     #make the dir if it doesn't exist 
@@ -74,18 +71,24 @@ def store_photo(status, up_file, file_data):
         pass
 
     full_filename = os.path.join( dest_dir + new_name )
-    print full_filename
-    #write the file out
-    fout = open(full_filename, 'wb+')
-    for chunk in up_file.chunks():
-        fout.write(chunk)
-    fout.close()
-    
-    
-    m = models.Photo.objects.filter(url=file_name)
+    #if the file exists, something is poopy
+    m = models.Photo.objects.filter(url=full_filename)
     if m:
-    	status.errors.append("This photo exists somehow, shit snacks")
-    	status.success = False
+        status.errors.append("This photo exists somehow, shit snacks")
+        status.success = False
+    else:
+       
+        #write the file out
+        fout = open(full_filename, 'wb+')
+        for chunk in up_file.chunks():
+            fout.write(chunk)
+        fout.close()
+    
+        file_data.url = full_filename
+        status.success = True
+        status.data["photo"] = file_data
+        file_data.save() #breaks here
+
         
     return status
     
